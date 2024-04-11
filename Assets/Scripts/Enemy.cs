@@ -131,10 +131,7 @@ public class Enemy : MonoBehaviour
         }
         else if (other.gameObject.CompareTag("PlayerBullet") && curHp < 1f)
         {
-            anim.SetTrigger("isDie");
-            isChase = false;
-            hitReady = false;
-            nav.isStopped = true;
+            StartCoroutine(Die());
         }
     }
 
@@ -142,5 +139,17 @@ public class Enemy : MonoBehaviour
     {
         curHp -= 2f;
         yield return null;
+    }
+
+    IEnumerator Die()
+    {
+        anim.SetTrigger("isDie");
+        isChase = false;
+        hitReady = false;
+        nav.enabled = false;
+
+        yield return new WaitForSeconds(5);
+
+        Destroy(gameObject);
     }
 }

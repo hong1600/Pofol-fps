@@ -10,6 +10,7 @@ TagManager:
   - PlayerBullet
   - Attack
   - Ground
+  - PlayerGrenade
   layers:
   - Default
   - TransparentFX

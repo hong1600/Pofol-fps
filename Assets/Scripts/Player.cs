@@ -7,10 +7,11 @@ public class Player : MonoBehaviour
 {
     private Animator anim;
     private Camera mainCam;
-    private CapsuleCollider cap;
     private Rigidbody rigid;
     private Slider hpBar;
+    private BoxCollider box;
 
+    [SerializeField] private Transform player;
     [SerializeField] private Transform cameraTrs;
     [SerializeField] private Transform playerTrs;
     [SerializeField] private Transform bulletTrs;
@@ -36,7 +37,9 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject weapon1;
     [SerializeField] GameObject weapon2;
     [SerializeField] GameObject bullet;
-    [SerializeField] GameObject hitEffect;
+    [SerializeField] GameObject hitEffect1;
+    [SerializeField] GameObject hitEffect2;
+    [SerializeField] GameObject grenade;
 
     [SerializeField] private float curHp = 100;
     private float maxHp = 100;
@@ -45,9 +48,9 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
+        box = playerTrs.GetComponent<BoxCollider>();
         hpBar = displayUI.GetComponent<Slider>();
         mainCam = Camera.main;
-        cap = playerTrs.GetComponent<CapsuleCollider>();
         rigid = playerTrs.GetComponent<Rigidbody>();
         anim = playerTrs.GetComponent<Animator>();
     }
@@ -67,6 +70,7 @@ public class Player : MonoBehaviour
         checkMouseLock();
         swap();
         shoot();
+        shootGrenade();
         aiming();
         hpUI();
     }
@@ -133,8 +137,8 @@ public class Player : MonoBehaviour
     {
         if (rigid.velocity.y <= 0)//땅 확인
         {
-            isGround = Physics.Raycast(cap.bounds.center, Vector3.down,
-                cap.height * 0.55f, LayerMask.GetMask("Ground"));
+            isGround = Physics.Raycast(box.bounds.center, Vector3.down,
+               box.size.y * 0.55f, LayerMask.GetMask("Ground"));
         }
         else 
         {
@@ -185,7 +189,6 @@ public class Player : MonoBehaviour
         }
     }
 
-
     public void swap()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))//1번 무기
@@ -216,27 +219,64 @@ public class Player : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && hasWeapon == true)
         {
-            if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out RaycastHit hit, 100f))
-            {
-                Instantiate(hitEffect, hit.point, Quaternion.LookRotation(hit.normal));
-                Instantiate(bullet, bulletTrs.position, transform.rotation);
-            }
-            anim.SetBool("isFire", true);
+            //if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out RaycastHit hit, 100f))
+            //{
+            //    Instantiate(bullet, bulletTrs.position, bulletTrs.rotation);
+            //    Instantiate(hitEffect1, hit.point, Quaternion.LookRotation(hit.normal));
+            //}
+            //anim.SetBool("isFire", true);
+
+            StartCoroutine(shootbullet());
         }
-        if (Input.GetMouseButtonUp(0) && hasWeapon == true)
+
+        if (Input.GetKeyDown(KeyCode.F) && hasWeapon == true)
+        {
+            StartCoroutine (shootgrenade());
+        }
+
+        if (Input.GetMouseButtonUp(0) && Input.GetKeyUp(KeyCode.F))
         {
             anim.SetBool("isFire", false);
         }
-        
+    }
+    IEnumerator shootbullet()
+    {
+        if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out RaycastHit hit, 100f))
+        {
+            Instantiate(bullet, bulletTrs.position, bulletTrs.rotation);
+            Instantiate(hitEffect1, hit.point, Quaternion.LookRotation(hit.normal));
+            anim.SetBool("isFire", true);
+        }
+        yield return null;
+    }
+
+    IEnumerator shootgrenade()
+    {
+        if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out RaycastHit hit, 100f))
+        {
+            Instantiate(grenade, bulletTrs.position, bulletTrs.rotation);
+            Instantiate(hitEffect2, hit.point, Quaternion.LookRotation(hit.normal));
+            anim.SetBool("isFire", true);
+        }
+
+        yield return null;
+    }
+
+    private void shootGrenade()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("EnemyAttack") && curHp > 0 && noHit == false)
+        if (other.CompareTag("Attack") && curHp > 0 && noHit == false)
         {
             StartCoroutine(Hit());
         }
-        else if (other.CompareTag("EnemyAttack") && curHp < 1 && noHit == false && isDie == false)
+        else if (other.CompareTag("Attack") && curHp < 1 && noHit == false && isDie == false)
         {
             isControll = false;
             anim.SetTrigger("isDie");
