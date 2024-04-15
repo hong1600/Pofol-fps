@@ -27,6 +27,7 @@ public class Player : MonoBehaviour
     private bool noHit;
     private bool isDie = false;
     public bool hasWeapon = false;
+    private bool inventoryon = false;
     
 
     [SerializeField] private bool isGround;
@@ -40,6 +41,7 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject hitEffect1;
     [SerializeField] GameObject hitEffect2;
     [SerializeField] GameObject grenade;
+    [SerializeField] GameObject inventoryUI;
 
     [SerializeField] private float curHp = 100;
     private float maxHp = 100;
@@ -67,12 +69,13 @@ public class Player : MonoBehaviour
         lookAround();
         checkGround();
         jump();
-        checkMouseLock();
+        //checkMouseLock();
         swap();
         shoot();
         shootGrenade();
         aiming();
         hpUI();
+        inventory();
     }
 
     private void move()
@@ -174,20 +177,20 @@ public class Player : MonoBehaviour
         rigid.velocity = new Vector3(rigid.velocity.x, verticalVelocity, rigid.velocity.z);
     }
 
-    private void checkMouseLock()
-    {
-        if (Input.GetKeyDown(KeyCode.Tab))//탭을 누르면
-        {
-            if (Cursor.lockState == CursorLockMode.Locked)//커서 잠겨 있을때
-            {
-                Cursor.lockState = CursorLockMode.None;
-            }
-            else//커서 안잠겨 있을때
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-            }
-        }
-    }
+    //private void checkMouseLock()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.CapsLock))//탭을 누르면
+    //    {
+    //        if (Cursor.lockState == CursorLockMode.Locked)//커서 잠겨 있을때
+    //        {
+    //            Cursor.lockState = CursorLockMode.None;
+    //        }
+    //        else//커서 안잠겨 있을때
+    //        {
+    //            Cursor.lockState = CursorLockMode.Locked;
+    //        }
+    //    }
+    //}
 
     public void swap()
     {
@@ -302,5 +305,22 @@ public class Player : MonoBehaviour
             curHp -= 10f;
         }
         hpBar.value = curHp / maxHp;
+    }
+
+    private void inventory()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab) && inventoryon == false)
+        {
+            inventoryUI.SetActive(true);
+            Cursor.lockState = CursorLockMode.None;
+            inventoryon = true;
+        }
+
+        else if (Input.GetKeyDown(KeyCode.Tab) && inventoryon == true)
+        {
+            inventoryUI.SetActive(false);
+            Cursor.lockState = CursorLockMode.Locked;
+            inventoryon = false;
+        }
     }
 }

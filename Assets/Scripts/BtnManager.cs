@@ -1,0 +1,54 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
+public class BtnManager : MonoBehaviour
+{
+    [SerializeField] GameObject inventoryUI;
+    [SerializeField] GameObject optionUI;
+    [SerializeField] Sprite volumeOn;
+    [SerializeField] Sprite volumeOff;
+
+    private bool volume;
+
+    private void Start()
+    {
+        volume = true;
+    }
+
+    public void clickStart()
+    {
+        SceneManager.LoadScene(1);
+    }
+
+    public void clickExit()
+    {
+
+    }
+
+    public void clickContinue() 
+    {
+
+    }
+
+    public void clickOption()
+    {
+        inventoryUI.SetActive(false);
+        optionUI.SetActive(true);
+    }
+
+    public void clickExitMain()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void clickVolume()
+    {
+        if (volume == true)
+        {
+            volume = false;
+        }
+    }
+}
