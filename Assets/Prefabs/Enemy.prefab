@@ -425,6 +425,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackBox: {fileID: 0}
+  coin: {fileID: 1950871307682000, guid: 01348926c7cbb3347a006c37204131c3, type: 3}
   enemyTrs: {fileID: 1531160173279744094}
   playerTrs: {fileID: 0}
   spawnPoint: {fileID: 0}

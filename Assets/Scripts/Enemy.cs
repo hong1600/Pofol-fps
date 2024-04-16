@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     CapsuleCollider cap;
     NavMeshAgent nav;
     [SerializeField] GameObject attackBox;
+    [SerializeField] GameObject coin;
 
     [SerializeField] Transform enemyTrs;
     [SerializeField] Transform playerTrs;
@@ -147,6 +148,8 @@ public class Enemy : MonoBehaviour
         isChase = false;
         hitReady = false;
         nav.enabled = false;
+
+        Instantiate(coin, gameObject.transform.position * 10f, Quaternion.identity);
 
         yield return new WaitForSeconds(5);
 

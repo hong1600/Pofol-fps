@@ -11,13 +11,6 @@ public class BtnManager : MonoBehaviour
     [SerializeField] Sprite volumeOn;
     [SerializeField] Sprite volumeOff;
 
-    private bool volume;
-
-    private void Start()
-    {
-        volume = true;
-    }
-
     public void clickStart()
     {
         SceneManager.LoadScene(1);
@@ -37,6 +30,12 @@ public class BtnManager : MonoBehaviour
 
     }
 
+
+
+
+
+
+
     public void clickOption()
     {
         inventoryUI.SetActive(false);
@@ -48,11 +47,10 @@ public class BtnManager : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    public void clickVolume()
+    public void clickBack()
     {
-        if (volume == true)
-        {
-            volume = false;
-        }
+        optionUI.SetActive(false);
+        inventoryUI.SetActive(true);
     }
+
 }

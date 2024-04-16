@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,14 +40,13 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject weapon1;
     [SerializeField] GameObject weapon2;
     [SerializeField] GameObject bullet;
-    [SerializeField] GameObject hitEffect1;
-    [SerializeField] GameObject hitEffect2;
     [SerializeField] GameObject grenade;
     [SerializeField] GameObject inventoryUI;
 
     [SerializeField] private float curHp = 100;
     private float maxHp = 100;
     private static int damage = 5;
+    private float haveCoin = 0; 
     
 
     private void Awake()
@@ -72,7 +72,6 @@ public class Player : MonoBehaviour
         jump();
         swap();
         shoot();
-        shootGrenade();
         aiming();
         hpUI();
         inventory();
@@ -185,6 +184,13 @@ public class Player : MonoBehaviour
             hasWeapon = true;
             anim.SetBool("hasWeapon", true);
         }
+
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            hasWeapon = true;
+            anim.SetBool("isPistolAim", true) ;
+        }
+
         else if (Input.GetKeyDown(KeyCode.X))//무기 장착 해제
         {
             hasWeapon = false;
@@ -233,7 +239,6 @@ public class Player : MonoBehaviour
         if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out RaycastHit hit, 100f))
         {
             Instantiate(bullet, bulletTrs.position, bulletTrs.rotation);
-            Instantiate(hitEffect1, hit.point, Quaternion.LookRotation(hit.normal));
             anim.SetBool("isFire", true);
         }
         yield return null;
@@ -244,20 +249,12 @@ public class Player : MonoBehaviour
         if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out RaycastHit hit, 100f))
         {
             Instantiate(grenade, bulletTrs.position, bulletTrs.rotation);
-            Instantiate(hitEffect2, hit.point, Quaternion.LookRotation(hit.normal));
             anim.SetBool("isFire", true);
         }
 
         yield return null;
     }
 
-    private void shootGrenade()
-    {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-
-        }
-    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -265,6 +262,7 @@ public class Player : MonoBehaviour
         {
             StartCoroutine(Hit());
         }
+
         else if (other.CompareTag("Attack") && curHp < 1 && noHit == false && isDie == false)
         {
             isControll = false;
@@ -272,7 +270,18 @@ public class Player : MonoBehaviour
             isDie = true;
             GameManager.instance.IsGameOver = true;
         }
+
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (gameObject.CompareTag("Coin"))
+        {
+            haveCoin += 100f;
+            Destroy(gameObject.gameObject);
+        }
+    }
+    
 
     IEnumerator Hit()
     {

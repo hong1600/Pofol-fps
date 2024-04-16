@@ -11,6 +11,7 @@ TagManager:
   - Attack
   - Ground
   - PlayerGrenade
+  - Coin
   layers:
   - Default
   - TransparentFX
