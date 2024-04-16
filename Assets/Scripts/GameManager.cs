@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
     private void SpawnEnemy()
     {
         int rand = Random.Range(0, points.Count);
-        
+
         Instantiate(enemy, points[rand].position, points[rand].rotation);
     }
 }

@@ -28,6 +28,7 @@ public class Player : MonoBehaviour
     private bool isDie = false;
     public bool hasWeapon = false;
     private bool inventoryon = false;
+    private bool isPause = false;
     
 
     [SerializeField] private bool isGround;
@@ -69,7 +70,6 @@ public class Player : MonoBehaviour
         lookAround();
         checkGround();
         jump();
-        //checkMouseLock();
         swap();
         shoot();
         shootGrenade();
@@ -177,20 +177,6 @@ public class Player : MonoBehaviour
         rigid.velocity = new Vector3(rigid.velocity.x, verticalVelocity, rigid.velocity.z);
     }
 
-    //private void checkMouseLock()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.CapsLock))//탭을 누르면
-    //    {
-    //        if (Cursor.lockState == CursorLockMode.Locked)//커서 잠겨 있을때
-    //        {
-    //            Cursor.lockState = CursorLockMode.None;
-    //        }
-    //        else//커서 안잠겨 있을때
-    //        {
-    //            Cursor.lockState = CursorLockMode.Locked;
-    //        }
-    //    }
-    //}
 
     public void swap()
     {
@@ -314,6 +300,12 @@ public class Player : MonoBehaviour
             inventoryUI.SetActive(true);
             Cursor.lockState = CursorLockMode.None;
             inventoryon = true;
+
+            if (isPause == false)
+            {
+                Time.timeScale = 0f;
+                isPause = true;
+            }
         }
 
         else if (Input.GetKeyDown(KeyCode.Tab) && inventoryon == true)
@@ -321,6 +313,12 @@ public class Player : MonoBehaviour
             inventoryUI.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             inventoryon = false;
+
+            if (isPause == true)
+            {
+                Time.timeScale = 1f;
+                isPause = false;
+            }
         }
     }
 }

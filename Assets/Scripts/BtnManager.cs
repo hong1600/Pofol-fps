@@ -25,7 +25,11 @@ public class BtnManager : MonoBehaviour
 
     public void clickExit()
     {
-
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 
     public void clickContinue() 
