@@ -42,6 +42,7 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject bullet;
     [SerializeField] GameObject grenade;
     [SerializeField] GameObject inventoryUI;
+    [SerializeField] AudioClip fireSound;
 
     [SerializeField] private float curHp = 100;
     private float maxHp = 100;
@@ -236,7 +237,7 @@ public class Player : MonoBehaviour
     }
     IEnumerator shootbullet()
     {
-        if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out RaycastHit hit, 100f))
+        if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out RaycastHit hit, 1000f))
         {
             Instantiate(bullet, bulletTrs.position, bulletTrs.rotation);
             anim.SetBool("isFire", true);
@@ -258,12 +259,12 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Attack") && curHp > 0 && noHit == false)
+        if (other.gameObject.CompareTag("Attack") && curHp > 0 && noHit == false)
         {
             StartCoroutine(Hit());
         }
 
-        else if (other.CompareTag("Attack") && curHp < 1 && noHit == false && isDie == false)
+        else if (other.gameObject.CompareTag("Attack") && curHp < 1 && noHit == false && isDie == false)
         {
             isControll = false;
             anim.SetTrigger("isDie");
@@ -271,10 +272,6 @@ public class Player : MonoBehaviour
             GameManager.instance.IsGameOver = true;
         }
 
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
         if (gameObject.CompareTag("Coin"))
         {
             haveCoin += 100f;
@@ -282,7 +279,6 @@ public class Player : MonoBehaviour
         }
     }
     
-
     IEnumerator Hit()
     {
         curHp -= 5;

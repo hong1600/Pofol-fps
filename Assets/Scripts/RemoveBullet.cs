@@ -8,17 +8,22 @@ public class RemoveBullet : MonoBehaviour
     [SerializeField] GameObject bulletEffect;
 
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision coll)
     {
-        if (collision.gameObject.CompareTag("PlayerBullet"))
+        if (coll.collider.CompareTag("PlayerBullet"))
         {
+            ContactPoint cp = coll.GetContact(0);
+            Quaternion rot = Quaternion.LookRotation(-cp.normal);
 
-            Destroy(collision.gameObject);
+            GameObject bulleteffect = Instantiate(bulletEffect, cp.point, rot);
+
+            Destroy(bulleteffect, 0.5f);
+            Destroy(coll.gameObject);
         }
 
-        if (collision.gameObject.CompareTag("PlayerGrenade"))
+        if (coll.gameObject.CompareTag("PlayerGrenade"))
         {
-            Destroy(collision.gameObject);
+            Destroy(coll.gameObject);
         }
 
     }

@@ -7,7 +7,7 @@ public class Enemy : MonoBehaviour
 {
     Animator anim;
     Rigidbody rigid;
-    CapsuleCollider cap;
+    BoxCollider box;
     NavMeshAgent nav;
     [SerializeField] GameObject attackBox;
     [SerializeField] GameObject coin;
@@ -29,8 +29,8 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
+        box = GetComponent<BoxCollider>();
         anim = GetComponent<Animator>();
-        cap = GetComponent<CapsuleCollider>();
         rigid = GetComponent<Rigidbody>();
         nav = GetComponent<NavMeshAgent>();
     }
@@ -59,8 +59,8 @@ public class Enemy : MonoBehaviour
     {
         if (verticalVelocity <= 0)
         {
-            isGround = Physics.Raycast(cap.bounds.center, Vector3.down,
-                cap.height * 0.55f, LayerMask.GetMask("Ground"));
+            isGround = Physics.Raycast(box.bounds.center, Vector3.down,
+                box.size.y * 0.55f, LayerMask.GetMask("Ground"));
         }
         else isGround = false;
     }
@@ -75,7 +75,6 @@ public class Enemy : MonoBehaviour
         {
             verticalVelocity -= gravity * Time.deltaTime;
         }
-
         rigid.velocity = new Vector3(rigid.velocity.x, verticalVelocity, rigid.velocity.z);
     }
 
@@ -124,13 +123,13 @@ public class Enemy : MonoBehaviour
         anim.SetBool("isAttack", false);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision coll)
     {
-        if (other.gameObject.CompareTag("PlayerBullet") && curHp > 0f)
+        if (coll.collider.CompareTag("PlayerBullet") && curHp > 0f)
         {
             StartCoroutine(Hit());
         }
-        else if (other.gameObject.CompareTag("PlayerBullet") && curHp < 1f)
+        else if (coll.collider.CompareTag("PlayerBullet") && curHp < 1f)
         {
             StartCoroutine(Die());
         }
