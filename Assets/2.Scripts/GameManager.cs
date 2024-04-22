@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
 
     private bool isGameOver;
 
+    [SerializeField] Transform playerTrs;
+
     public bool IsGameOver
     {
         get 
@@ -37,7 +39,8 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
         }
-        else
+
+        else if (instance != this)
         {
             Destroy(this.gameObject);
         }
@@ -67,5 +70,10 @@ public class GameManager : MonoBehaviour
         int rand = Random.Range(0, points.Count);
 
         Instantiate(enemy, points[rand].position, points[rand].rotation);
+    }
+
+    public Vector3 playerPos()
+    {
+        return playerTrs.position;
     }
 }

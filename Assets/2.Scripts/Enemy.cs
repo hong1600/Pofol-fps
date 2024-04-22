@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] Transform enemyTrs;
     [SerializeField] Transform playerTrs;
     [SerializeField] Transform spawnPoint;
-    
+
     public bool isGround = false;
     private float verticalVelocity;
     private float gravity = 9.81f;
@@ -23,9 +23,7 @@ public class Enemy : MonoBehaviour
     private bool isAttack;
     private bool hitReady;
 
-    float maxHp = 10f;
     [SerializeField] float curHp = 10f;
-    [SerializeField] float damage = 1f;
 
     private void Awake()
     {
@@ -90,7 +88,7 @@ public class Enemy : MonoBehaviour
     {
         if (nav.enabled && isChase == true) 
         {
-            nav.SetDestination(playerTrs.position);
+            nav.SetDestination(GameManager.instance.playerPos());
             nav.isStopped = !isChase;
         }
     }
@@ -151,7 +149,9 @@ public class Enemy : MonoBehaviour
         hitReady = false;
         nav.enabled = false;
 
-        Instantiate(coin, gameObject.transform.position * 10f, Quaternion.identity);
+        Instantiate(coin, enemyTrs.position, Quaternion.identity);
+
+        box.enabled = false;
 
         yield return new WaitForSeconds(5);
 

@@ -9,7 +9,6 @@ public class Player : MonoBehaviour
     private Animator anim;
     private Camera mainCam;
     private Rigidbody rigid;
-    private Slider hpBar;
     private BoxCollider box;
 
     [SerializeField] Transform player;
@@ -17,7 +16,6 @@ public class Player : MonoBehaviour
     [SerializeField] Transform playerTrs;
     [SerializeField] Transform bulletTrs;
     [SerializeField] Transform displayUI;
-    [SerializeField] Transform flashTrs;
 
     private Vector3 moveDir;
     private float gravity = 9.81f;
@@ -31,7 +29,8 @@ public class Player : MonoBehaviour
     public bool hasWeapon = false;
     private bool inventoryon = false;
     private bool isPause = false;
-    
+
+    Vector2 mouse;
 
     [SerializeField] bool isGround;
     [SerializeField] float moveSpeed;
@@ -47,8 +46,8 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float curHp = 100;
     private float maxHp = 100;
-    private static int damage = 5;
-    private float haveCoin = 0; 
+    private Slider hpBar;
+    [SerializeField]private float haveCoin = 0; 
     
 
     private void Awake()
@@ -82,8 +81,8 @@ public class Player : MonoBehaviour
     private void move()
     {
         Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));//키보드입력값
-        bool isMove = moveInput.magnitude != 0f;//입력값 확인
-        if(isMove && isControll == true) 
+        //bool isMove = moveInput.magnitude != 0f;//입력값 확인
+        if(isControll == true) 
         {
             Vector3 lookForward =  new Vector3(cameraTrs.forward.x, 0f, cameraTrs.forward.z).normalized;//정면방향
             Vector3 lookRight = new Vector3(cameraTrs.right.x, 0f, cameraTrs.right.z).normalized;//오른쪽방향
@@ -94,18 +93,16 @@ public class Player : MonoBehaviour
             transform.position += moveDir * Time.deltaTime * moveSpeed;//이동속도
         }
 
-        if (Input.GetKey(KeyCode.LeftShift) && isMove)//기본 달리기
+        if (Input.GetKey(KeyCode.LeftShift))//기본 달리기 
         {
-            isRun = true;
             anim.SetBool("isRun", true);
         }
         else if (Input.GetKeyUp(KeyCode.LeftShift))
         {
-            isRun = false;
             anim.SetBool("isRun", false);
         }
 
-        if (Input.GetKey(KeyCode.LeftShift) && hasWeapon == true && isMove)//무기 달리기
+        if (Input.GetKey(KeyCode.LeftShift) && hasWeapon == true)//무기 달리기
         {
             anim.SetBool("isRifleRun", true);
         }
@@ -120,21 +117,21 @@ public class Player : MonoBehaviour
 
     private void lookAround()
     {
-        Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-        Vector3 camAngle = cameraTrs.rotation.eulerAngles;
-        float x = camAngle.x - mouseDelta.y;
+        mouse.x += Input.GetAxis("Mouse X");
+        mouse.y += Input.GetAxis("Mouse Y");
 
-        if (x < 180f)
+        float x = mouse.y;
+
+        if (x > 0)
         {
-            x = Mathf.Clamp(x, -1f, 70f);
+            Mathf.Clamp(x, -1f, 45f);
         }
-        else
+        else if (x < 0)
         {
-            x = Mathf.Clamp(x, 335f, 361f);
+            Mathf.Clamp(x, 1f, -45f);
         }
 
-        cameraTrs.rotation = Quaternion.Euler(x, camAngle.y + mouseDelta.x, camAngle.z);
-
+        transform.localRotation = Quaternion.Euler(-x, mouse.x, 0);
     }
 
     private void checkGround()
@@ -216,13 +213,6 @@ public class Player : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && hasWeapon == true)
         {
-            //if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out RaycastHit hit, 100f))
-            //{
-            //    Instantiate(bullet, bulletTrs.position, bulletTrs.rotation);
-            //    Instantiate(hitEffect1, hit.point, Quaternion.LookRotation(hit.normal));
-            //}
-            //anim.SetBool("isFire", true);
-
             StartCoroutine(shootbullet());
         }
 
@@ -230,24 +220,21 @@ public class Player : MonoBehaviour
         {
             StartCoroutine (shootgrenade());
         }
-
-        if (Input.GetMouseButtonUp(0) && Input.GetKeyUp(KeyCode.F))
-        {
-            anim.SetBool("isFire", false);
-        }
     }
     IEnumerator shootbullet()
     {
-        if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out RaycastHit hit, 100f))
+        if (Physics.Raycast(mainCam.transform.position, mainCam.transform.forward, out RaycastHit hit, 1000f))
         {
             Instantiate(bullet, bulletTrs.position, bulletTrs.rotation);
-            GameObject flash = Instantiate(muzzleFlash, flashTrs.position, flashTrs.rotation);
+            GameObject flash = Instantiate(muzzleFlash, bulletTrs.position, bulletTrs.rotation);
 
             Destroy(flash, 0.1f);
 
             anim.SetBool("isFire", true);
         }
-        yield return null;
+        yield return new WaitForSeconds(0.5f);
+
+        anim.SetBool("isFire", false);
     }
 
     IEnumerator shootgrenade()
@@ -277,6 +264,13 @@ public class Player : MonoBehaviour
             GameManager.instance.IsGameOver = true;
         }
 
+        if (other.CompareTag("Coin"))
+        {
+            haveCoin += 10;
+
+            Destroy(other.gameObject);
+        }
+
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -291,7 +285,7 @@ public class Player : MonoBehaviour
 
     IEnumerator Hit()
     {
-        curHp -= 5;
+        curHp -= 20;
         noHit = true;
 
         yield return new WaitForSeconds(2);

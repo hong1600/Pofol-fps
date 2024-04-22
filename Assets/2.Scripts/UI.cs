@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class UI : MonoBehaviour
 {
-    [SerializeField] private Slider hpBar;
 
     private void Awake()
     {

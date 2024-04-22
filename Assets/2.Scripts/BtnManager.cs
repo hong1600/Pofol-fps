@@ -30,12 +30,6 @@ public class BtnManager : MonoBehaviour
 
     }
 
-
-
-
-
-
-
     public void clickOption()
     {
         inventoryUI.SetActive(false);
