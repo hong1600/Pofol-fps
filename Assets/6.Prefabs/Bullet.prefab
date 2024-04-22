@@ -12,7 +12,11 @@ GameObject:
   - component: {fileID: 7203578369164980680}
   - component: {fileID: 5704897757525373081}
   - component: {fileID: 5566365970901205076}
+<<<<<<< HEAD:Assets/6.Prefabs/Bullet.prefab
   - component: {fileID: 6447679103276030246}
+=======
+  - component: {fileID: 3750035337770124423}
+>>>>>>> main:Assets/Prefabs/Bullet.prefab
   m_Layer: 0
   m_Name: Bullet
   m_TagString: PlayerBullet
@@ -34,7 +38,7 @@ Transform:
   m_Children:
   - {fileID: 6614125624345703410}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7203578369164980680
 MonoBehaviour:
@@ -97,7 +101,11 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.01933992
   m_Center: {x: 0, y: 0.00011384487, z: 0.01840353}
+<<<<<<< HEAD:Assets/6.Prefabs/Bullet.prefab
 --- !u!82 &6447679103276030246
+=======
+--- !u!82 &3750035337770124423
+>>>>>>> main:Assets/Prefabs/Bullet.prefab
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

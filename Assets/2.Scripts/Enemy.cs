@@ -27,6 +27,7 @@ public class Enemy : MonoBehaviour
 
     private void Awake()
     {
+        box = GetComponent<BoxCollider>();
         anim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody>();
         nav = GetComponent<NavMeshAgent>();
@@ -73,7 +74,6 @@ public class Enemy : MonoBehaviour
         {
             verticalVelocity -= gravity * Time.deltaTime;
         }
-
         rigid.velocity = new Vector3(rigid.velocity.x, verticalVelocity, rigid.velocity.z);
     }
 
@@ -122,14 +122,21 @@ public class Enemy : MonoBehaviour
         anim.SetBool("isAttack", false);
     }
 
+<<<<<<< HEAD:Assets/2.Scripts/Enemy.cs
 
+=======
+>>>>>>> main:Assets/Scripts/Enemy.cs
     private void OnCollisionEnter(Collision coll)
     {
         if (coll.collider.CompareTag("PlayerBullet") && curHp > 0f)
         {
             StartCoroutine(Hit());
         }
+<<<<<<< HEAD:Assets/2.Scripts/Enemy.cs
         else if (coll.collider.gameObject.CompareTag("PlayerBullet") && curHp < 1f)
+=======
+        else if (coll.collider.CompareTag("PlayerBullet") && curHp < 1f)
+>>>>>>> main:Assets/Scripts/Enemy.cs
         {
             StartCoroutine(Die());
         }

@@ -42,7 +42,11 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject bullet;
     [SerializeField] GameObject grenade;
     [SerializeField] GameObject inventoryUI;
+<<<<<<< HEAD:Assets/2.Scripts/Player.cs
     [SerializeField] GameObject muzzleFlash;
+=======
+    [SerializeField] AudioClip fireSound;
+>>>>>>> main:Assets/Scripts/Player.cs
 
     [SerializeField] private float curHp = 100;
     private float maxHp = 100;
@@ -251,12 +255,12 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Attack") && curHp > 0 && noHit == false)
+        if (other.gameObject.CompareTag("Attack") && curHp > 0 && noHit == false)
         {
             StartCoroutine(Hit());
         }
 
-        else if (other.CompareTag("Attack") && curHp < 1 && noHit == false && isDie == false)
+        else if (other.gameObject.CompareTag("Attack") && curHp < 1 && noHit == false && isDie == false)
         {
             isControll = false;
             anim.SetTrigger("isDie");
@@ -264,6 +268,7 @@ public class Player : MonoBehaviour
             GameManager.instance.IsGameOver = true;
         }
 
+<<<<<<< HEAD:Assets/2.Scripts/Player.cs
         if (other.CompareTag("Coin"))
         {
             haveCoin += 10;
@@ -275,6 +280,8 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+=======
+>>>>>>> main:Assets/Scripts/Player.cs
         if (gameObject.CompareTag("Coin"))
         {
             haveCoin += 100f;
@@ -282,7 +289,6 @@ public class Player : MonoBehaviour
         }
     }
     
-
     IEnumerator Hit()
     {
         curHp -= 20;

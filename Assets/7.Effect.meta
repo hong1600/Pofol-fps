@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/7.Effect.meta
 guid: ff291763cf00dfc47ab4d3beb071f43f
+========
+guid: aee32d070614d0047afa25e8df44a289
+>>>>>>>> main:Assets/Sound/ShootingSound.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

@@ -1,5 +1,17 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
+<<<<<<<< HEAD:Assets/Sound.meta
 guid: 2b2e67a97804c394d8c482b474813e7a
+========
+guid: 9b9b0c3f7e17c0441803418a467fd5cf
+>>>>>>>> main:Assets/Icon.meta
+=======
+<<<<<<<< HEAD:Assets/Sound/ShootingSound.meta
+guid: 3b13fdf33dc94d347834fc33a6d245d3
+========
+guid: 0a50d59cc0b06c647b4cba9fca45ff0b
+>>>>>>>> main:Assets/Sound.meta
+>>>>>>> main
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
